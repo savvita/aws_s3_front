@@ -1,0 +1,32 @@
+.s3table__table {
+    min-width: 600px;
+}
+
+.s3table__caption {
+    caption-side: top;
+    background-color: var(--bs-table-bg);
+    color: var(--bs-table-color);
+}
+
+.s3table__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    color: #ccc;
+    transition: transform, color 200ms ease;
+}
+
+.s3__icon:hover {
+    transform: scale(1.2);
+    color: #fff;
+}
+
+.s3__input {
+    background-color: #eee;
+}
+
+.s3table__input__invalid {
+    background-color: #eee;
+    border: 1px solid #ff0000d3 !important;
+}
+
