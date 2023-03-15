@@ -6,6 +6,7 @@ import PerPageSelect from '../PerPageSelect';
 import ConfirmDeletingModal from '../ConfirmDeletingModal';
 import InfoModal from '../InfoModal';
 
+
 import { selectValues, selectStatus, selectUrl, getAsync, uploadAsync, deleteAsync } from '../../app/s3Slice';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
-import { Table, Spinner, UncontrolledTooltip, Row, Col } from 'reactstrap';
+import { Table, Spinner, UncontrolledTooltip, Row, Col, Button, Input } from 'reactstrap';
 import { FaFileUpload } from "react-icons/fa";
 import InputFileRow from './InputFileRow';
 
@@ -42,6 +43,11 @@ const S3objectTable = () => {
     const [perPage, setPerPage] = useState(10);
     const [pages, setPages] = useState([]);
 
+    const [text, setText] = useState("");
+
+    const rekognize = (value) => {
+        setText(value);
+    }
     useEffect(() => {
         dispatch(getAsync());
         pages.splice(0, pages.length);
@@ -124,7 +130,8 @@ const S3objectTable = () => {
 
     return (
         <>
-            <Table dark hover className="s3table__table table_sort">
+        <Row>
+            <Col> <Table dark hover className="s3table__table table_sort">
                 <caption className='s3table__caption ps-2 fs-3'>
                     <Row>
                         <Col className="text-center">
@@ -153,7 +160,7 @@ const S3objectTable = () => {
                 <tbody>
                     { addMode && <InputFileRow onUpload={ uploadFile } onCancel={ () => setAddMode(false) } /> }
                     { itemsPage && itemsPage.map((item, idx) => 
-                        item && <S3objectRow key={ item.key } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } url={ url } />)
+                        item && <S3objectRow key={ item.key } idx={ (currentPage - 1) * perPage + idx + 1 } item={ item } onDelete={ (item) => showCofirmModal(item) } url={ url } onRekognize={ rekognize } />)
                     }
                 </tbody>
                 <tfoot>
@@ -164,7 +171,13 @@ const S3objectTable = () => {
                         </td>
                     </tr>
                 </tfoot>
-            </Table>
+            </Table></Col>
+            <Col>
+                <h3 className="text-white mt-3">Розпізнаний текст</h3>
+                <Input className="mt-3" type="textarea" readOnly value={ text } style={{ height: '20rem' }} />
+            </Col>
+        </Row>
+           
             <ConfirmDeletingModal isOpen={ modal } onCancel={ () => setModal(false) } onAccept={ () => deleteItem() } item={ item } />
             <InfoModal isOpen={ infoModal } onAccept={ () => setInfoModal(false) }  text={ infoText } title={ infoHeader } />
         </>

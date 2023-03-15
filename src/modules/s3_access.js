@@ -1,6 +1,27 @@
 
 const api = "https://localhost:7066/api/s3";
 
+const rekognize = async (objectName) => {
+    if(!objectName) {
+        return undefined;
+    }
+    let results = {};
+
+
+    await fetch(`${ api }/rekognition?objectName=${ objectName }`, {
+        method: 'get'
+    })
+    .then(response => response.json())
+    .then(response => {
+        results = response;
+    })
+    .catch(() => {
+        results = undefined;
+    });
+
+    return results;
+}
+
 const getAsync = async () => {
     let results = {};
 
@@ -70,7 +91,8 @@ const functions = {
     api: api,
     getAsync: getAsync,
     uploadAsync: uploadAsync,
-    deleteAsync: deleteAsync
+    deleteAsync: deleteAsync,
+    rekognize: rekognize
 }
 
 export default functions;
